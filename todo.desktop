@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=0.1
+Name=ToDo
+GenericName=To Do List Application
+Comment=A simple To Do List
+Exec=python /usr/share/todo/todo.py
+Icon=python
+Terminal=false
+Type=Application
+Categories=Office;
+StartupNotify=true
