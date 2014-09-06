@@ -28,7 +28,7 @@ class ToDoList(Gtk.Window):
         self.numItems = 0
         self.lastItem = None
         self.listItems = list()
-        self.filePath = os.path.join(os.environ['HOME'], '.config/.ToDoList') 
+        self.filePath = os.path.expanduser('~/.config/.ToDoList')
         self.grid = Gtk.Grid()
         self.grid.set_row_spacing(10)
         self.grid.set_column_spacing(15)
