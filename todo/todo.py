@@ -15,9 +15,10 @@ Copyright (C) 2014 Kyle Hopkins
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-    
+
 from gi.repository import Gtk
 import os
+
 
 class ToDoList(Gtk.Window):
 
@@ -41,7 +42,7 @@ class ToDoList(Gtk.Window):
         self.itemEntry.set_hexpand(True)
         self.itemEntry.connect('activate', self.addClick)
 
-        btnAddItem = Gtk.Button(label='Add Item') 
+        btnAddItem = Gtk.Button(label='Add Item')
         btnAddItem.set_halign(Gtk.Align.END)
         btnAddItem.connect('released', self.addClick)
 
@@ -54,12 +55,12 @@ class ToDoList(Gtk.Window):
         self.programLoad()
 
     def addItem(self, value):
+        '''Adds a new task to the end of the list'''
         newBox = Gtk.Box()
         newLabel = Gtk.Label(value, xalign=0)
-        #newLabel.set_hexpand(True)
-        newButton = Gtk.Button('Check off')
+        newButton = Gtk.CheckButton()
         newButton.set_halign(Gtk.Align.END)
-        newButton.connect('released', self.btnChange)
+        #newButton.connect('released', self.btnChange)
 
         newBox.pack_start(newLabel, True, True, 15)
         newBox.pack_start(newButton, True, True, 0)
@@ -74,17 +75,14 @@ class ToDoList(Gtk.Window):
     def addClick(self, widget):
         entryText = self.itemEntry.get_text()
         if entryText:
-            self.addItem(entryText)    
+            self.addItem(entryText)
             self.itemEntry.set_text('')
 
-    def btnChange(self, widget):
-        parent = widget.get_parent()
-        parent.remove(widget)
-        widget = Gtk.Label('Done')
-        widget.set_halign(Gtk.Align.END)
-        parent.pack_start(widget, True, True, 8)
-        parent.show_all()
-        self.listItems.remove(parent)
+    def updateList(self):
+        for parent in self.listItems:
+            children = parent.get_children()
+            if children[1].get_active():
+                self.listItems.remove(parent)
 
     def programLoad(self):
         if self.fileCheck():
@@ -93,11 +91,12 @@ class ToDoList(Gtk.Window):
                     self.addItem(line.strip())
 
     def programSave(self, something, somethingElse):
+        self.updateList()
         with open(self.filePath, mode='w', encoding='utf-8') as openFile:
             for i in range(0, len(self.listItems)):
                 openFile.write(self.listItems[i].get_children()[0].get_text())
-                openFile.write('\n') 
-                Gtk.main_quit()    
+                openFile.write('\n')
+                Gtk.main_quit()
 
     def fileCheck(self):
         try:
