@@ -22,7 +22,7 @@ conflicts=()
 replaces=()
 backup=()
 options=(!emptydirs)
-install='todo.install'
+install=''
 source=()
 md5sums=()
 _gitroot='https://github.com/Kopkins/ToDo'
@@ -32,14 +32,14 @@ build() {
   cd "$srcdir"
   msg "Getting files from git server...."
   git clone "$_gitroot" "$_gitname-build"
-  cd "$srcdir/$_gitname-build"
 }
 
 package() {
   
+  cd "$srcdir/$_gitname-build"
   python setup.py install --root="$pkgdir/" --optimize=1
-  install -D -m644 todo.desktop /usr/share/applications/
-	install -D -m644 COPYING.txt /usr/share/licenses/python-todo-gtk/COPYING.txt
+  install -Dm644 todo.desktop "${pkgdir}/usr/share/applications/${_gitname}.desktop"
+  install -Dm644 COPYING.txt "${pkgdir}/usr/share/licenses/python-todo-gtk/COPYING.txt"
 
 }
 
