@@ -17,6 +17,7 @@ Copyright (C) 2014 Kyle Hopkins
 '''
 
 from gi.repository import Gtk
+import xml.etree.ElementTree as etree
 import os
 
 
@@ -29,7 +30,7 @@ class ToDoList(Gtk.Window):
         self.numItems = 0
         self.lastItem = None
         self.listItems = list()
-        self.filePath = os.path.expanduser('~/.config/.ToDoList')
+        self.filePath = os.path.expanduser('~/.config/todo.xml')
         self.grid = Gtk.Grid()
         self.grid.set_row_spacing(10)
         self.grid.set_column_spacing(15)
@@ -48,8 +49,10 @@ class ToDoList(Gtk.Window):
 
         # add them in the grid
         self.grid.add(headerLabel)
-        self.grid.attach_next_to(self.itemEntry, headerLabel, Gtk.PositionType.RIGHT, 1, 1)
-        self.grid.attach_next_to(btnAddItem, self.itemEntry, Gtk.PositionType.RIGHT, 1, 1)
+        self.grid.attach_next_to(self.itemEntry, headerLabel,
+            Gtk.PositionType.RIGHT, 1, 1)
+        self.grid.attach_next_to(btnAddItem, self.itemEntry,
+            Gtk.PositionType.RIGHT, 1, 1)
         self.lastItem = headerLabel
 
         self.programLoad()
@@ -68,7 +71,8 @@ class ToDoList(Gtk.Window):
         self.numItems += 1
         self.listItems.append(newBox)
 
-        self.grid.attach_next_to(newBox, self.lastItem, Gtk.PositionType.BOTTOM, 3, 1)
+        self.grid.attach_next_to(newBox, self.lastItem,
+            Gtk.PositionType.BOTTOM, 3, 1)
         newBox.show_all()
         self.lastItem = newBox
 
@@ -86,17 +90,20 @@ class ToDoList(Gtk.Window):
 
     def programLoad(self):
         if self.fileCheck():
-            with open(self.filePath, encoding='utf-8') as openFile:
-                for line in openFile:
-                    self.addItem(line.strip())
+            xmlTree = etree.parse(self.filePath)
+            root = xmlTree.getroot()
+            for item in root:
+                self.addItem(item.attrib['text'])
 
     def programSave(self, something, somethingElse):
         self.updateList()
-        with open(self.filePath, mode='w', encoding='utf-8') as openFile:
-            for i in range(0, len(self.listItems)):
-                openFile.write(self.listItems[i].get_children()[0].get_text())
-                openFile.write('\n')
-                Gtk.main_quit()
+        newXML = etree.Element('List')
+        for item in self.listItems:
+            newXML.append(etree.Element('item',
+                attrib={'text': item.get_children()[0].get_text()}))
+        XMLTree = etree.ElementTree(element=newXML)
+        XMLTree.write(self.filePath, encoding='utf-8')
+        Gtk.main_quit()
 
     def fileCheck(self):
         try:
