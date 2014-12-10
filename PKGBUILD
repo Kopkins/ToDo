@@ -1,11 +1,3 @@
-# This is an example PKGBUILD file. Use this as a start to creating your own,
-# and remove these comments. For more information, see 'man PKGBUILD'.
-# NOTE: Please fill out the license field for your package! If it is unknown,
-# then please put 'unknown'.
-
-# See http://wiki.archlinux.org/index.php/Python_Package_Guidelines for more
-# information on Python packaging.
-
 # Maintainer: Kyle Hopkins <kylehopkins1215@gmail.com>
 pkgname='python-todo-gtk'
 pkgver='0.1'
@@ -40,7 +32,7 @@ package() {
   python setup.py install --root="$pkgdir/" --optimize=1
   install -Dm644 todo.desktop "${pkgdir}/usr/share/applications/${_gitname}.desktop"
   install -Dm644 COPYING.txt "${pkgdir}/usr/share/licenses/python-todo-gtk/COPYING.txt"
-
+  install -Dm755 python-todo "/usr/bin/python-todo"
 }
 
 # vim:set ts=2 sw=2 et:
