@@ -32,7 +32,7 @@ package() {
   python setup.py install --root="$pkgdir/" --optimize=1
   install -Dm644 todo.desktop "${pkgdir}/usr/share/applications/${_gitname}.desktop"
   install -Dm644 COPYING.txt "${pkgdir}/usr/share/licenses/python-todo-gtk/COPYING.txt"
-  install -Dm755 python-todo "/usr/bin/python-todo"
+  install -Dm755 python-todo "${pkgdir}/usr/bin/python-todo"
 }
 
 # vim:set ts=2 sw=2 et:
