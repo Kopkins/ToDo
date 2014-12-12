@@ -63,7 +63,6 @@ class ToDoList(Gtk.Window):
         newLabel = Gtk.Label(value, xalign=0)
         newButton = Gtk.CheckButton()
         newButton.set_halign(Gtk.Align.END)
-        #newButton.connect('released', self.btnChange)
 
         newBox.pack_start(newLabel, True, True, 15)
         newBox.pack_start(newButton, True, True, 0)
@@ -83,10 +82,15 @@ class ToDoList(Gtk.Window):
             self.itemEntry.set_text('')
 
     def updateList(self):
+        clean = True
         for parent in self.listItems:
             children = parent.get_children()
             if children[1].get_active():
+                clean = False
                 self.listItems.remove(parent)
+                break
+        if not clean:
+            self.updateList()
 
     def programLoad(self):
         if self.fileCheck():
