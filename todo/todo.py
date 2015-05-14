@@ -81,16 +81,19 @@ class ToDoList(Gtk.Window):
             self.addItem(entryText)
             self.itemEntry.set_text('')
 
-    def updateList(self):
+    def updateList(self, index=0):
         clean = True
-        for parent in self.listItems:
+        lList = self.listItems[index:]
+        for parent in lList:
             children = parent.get_children()
             if children[1].get_active():
                 clean = False
+                self.numItems -= 1
                 self.listItems.remove(parent)
+            index += 1
+            if not clean:
+                self.updateList(index - 1)
                 break
-        if not clean:
-            self.updateList()
 
     def programLoad(self):
         if self.fileCheck():
