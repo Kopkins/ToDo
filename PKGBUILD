@@ -1,6 +1,6 @@
 # Maintainer: Kyle Hopkins <kylehopkins1215@gmail.com>
 pkgname='python-todo-gtk'
-pkgver='0.1'
+pkgver='0.2'
 pkgrel=1
 pkgdesc="A simple GTK+3 todo list application"
 arch=(any)
