@@ -16,27 +16,28 @@ Copyright (C) 2014 Kyle Hopkins
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import gi
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import xml.etree.ElementTree as etree
 import os
-
 
 class ToDoList(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title='To Do List')
+        self.grid = Gtk.Grid()
         self.set_border_width(10)
         self.set_default_size(500, 200)
         self.numItems = 0
         self.lastItem = None
         self.listItems = list()
         self.filePath = os.path.expanduser('~/.config/todo.xml')
-        self.grid = Gtk.Grid()
         self.grid.set_row_spacing(10)
         self.grid.set_column_spacing(15)
         self.add(self.grid)
         # starting widgets
-        headerLabel = Gtk.Label('To Do:', xalign=0)
+        headerLabel = Gtk.Label('To Do: ')
 
         self.itemEntry = Gtk.Entry()
         self.itemEntry.set_max_length(40)
@@ -60,7 +61,7 @@ class ToDoList(Gtk.Window):
     def addItem(self, value):
         '''Adds a new task to the end of the list'''
         newBox = Gtk.Box()
-        newLabel = Gtk.Label(value, xalign=0)
+        newLabel = Gtk.Label(value)
         newButton = Gtk.CheckButton()
         newButton.set_halign(Gtk.Align.END)
 
